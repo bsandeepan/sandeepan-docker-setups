@@ -28,8 +28,3 @@ RUN yum install -y python3-devel unixODBC-devel && \
 # create a /tocopy folder and Copy necessary files to /source
 RUN cd /home/ && rm -rf ./ec && cp -r ./ /source && \
     cp -r /opt/microsoft/msodbcsql17 /source && cd /
-
-# source layer/bin/activate
-# pip install -r requirements.txt --target /python --no-deps
-# zip -r /source.zip ./source/ => zip the folder if succeded so far
-# docker cp sandylambda:tocopy ./ => extract the python zip
