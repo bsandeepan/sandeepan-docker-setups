@@ -21,10 +21,16 @@ RUN mkdir /home/ec && cd /home/ec && \
     ./configure  --sysconfdir=/var/task  --disable-gui --disable-drivers --enable-iconv --with-iconv-char-enc=UTF8 --with-iconv-ucode-enc=UTF16LE  --prefix=/home && \
     make install && cd /
 
-# install python3 and unixodbc devel packages and then install msodbcsql
-RUN yum install -y python3-devel unixODBC-devel && \
-    ACCEPT_EULA=Y yum install -y msodbcsql17
+# install python3 and unixodbc devel packages
+RUN yum install -y python3-devel unixODBC-devel
 
-# create a /tocopy folder and Copy necessary files to /source
-RUN cd /home/ && rm -rf ./ec && cp -r ./ /source && \
-    cp -r /opt/microsoft/msodbcsql17 /source && cd /
+#  Copy unixODBC files to /source
+RUN cd /home/ && rm -rf ./ec && cp -r ./ /source && cd /
+
+# install SQL Server ODBC Driver
+RUN ACCEPT_EULA=Y yum install -y msodbcsql17 && \
+    cp -r /opt/microsoft/msodbcsql17 /source
+
+# install PostgreSQL ODBC Driver
+RUN yum install -y postgresql-odbc && mkdir -p /source/psqlodbc/lib64 && \
+    cp /usr/lib64/{psqlodbcw.so,libodbcpsqlS.so} /source/psqlodbc/lib64
